@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <title>For You ✨</title>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial;
+        background: white;
+        color: black;
+      }
+
+      /* SCREEN */
+
+      .screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: 1s;
+      }
+
+      /* START */
+
+      #start {
+        font-size: 28px;
+        cursor: pointer;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* INTRO IMAGE */
+
+      #introImage {
+        width: 220px;
+        margin-bottom: 30px;
+        margin: 25px 0; /* tạo khoảng cách trên dưới */
+
+        animation:
+          floatImage 4s ease-in-out infinite,
+          glowImage 3s infinite alternate;
+      }
+
+      /* FLOAT */
+
+      @keyframes floatImage {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      /* GLOW */
+
+      @keyframes glowImage {
+        0% {
+          filter: drop-shadow(0 0 5px pink);
+        }
+        100% {
+          filter: drop-shadow(0 0 25px hotpink);
+        }
+      }
+
+      /* ENVELOPE */
+
+      /* LETTER SCREEN */
+
+      #letterScreen {
+        display: none;
+        background: linear-gradient(135deg, #ffd6f2, #ffe9f7, #ffd6f2);
+      }
+
+      /* HEART 3D */
+
+      .heart {
+        position: absolute;
+        font-size: 28px;
+        animation: heartMove 8s linear infinite;
+      }
+
+      @keyframes heartMove {
+        0% {
+          transform: translateY(100vh) scale(0.5) rotate(0deg);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* FLOWER */
+
+      .flowerLT {
+        position: absolute;
+        font-size: 22px;
+        animation: fall 8s linear infinite;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-10vh);
+        }
+        100% {
+          transform: translateY(100vh);
+        }
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      /* ENVELOPE */
+
+      .envelope {
+        width: 380px;
+        height: 300px;
+        background: #f6b6dc;
+        position: relative;
+        cursor: pointer;
+        border-radius: 8px;
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.35),
+          inset 0 0 20px rgba(255, 255, 255, 0.4);
+      }
+
+      /* FLAP */
+
+      .flap {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #f2a7d5;
+        clip-path: polygon(0 0, 100% 0, 50% 65%);
+        transform-origin: top;
+        transition: transform 1s ease;
+      }
+
+      /* OPEN ANIMATION */
+
+      .open .flap {
+        transform: rotateX(180deg);
+      }
+
+      /* LETTER PAPER */
+
+      .letter {
+        position: absolute;
+        top: 20px;
+        left: 18px;
+        right: 18px;
+
+        background: #fffdf7;
+        color: #444;
+
+        padding: 25px;
+        border-radius: 6px;
+
+        font-size: 18px;
+        line-height: 1.6;
+
+        font-family: "Segoe Script", "Brush Script MT", cursive;
+
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+        transform: translateY(90px);
+        opacity: 0;
+
+        transition: all 1s ease;
+      }
+
+      /* PAPER RISE */
+
+      .open .letter {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+
+      /* FLOWER */
+
+      #flowerScreen {
+        display: none;
+        background: radial-gradient(circle, #000, #111);
+      }
+
+      /* .flower {
+        width: 300px;
+        transform: scale(0);
+        opacity: 0;
+        animation: bloom 2s forwards;
+      }
+
+      @keyframes bloom {
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .swing {
+        animation: swing 4s ease-in-out infinite;
+      }
+
+      @keyframes swing {
+        0% {
+          transform: scale(1) rotate(-6deg);
+        }
+        50% {
+          transform: scale(1) rotate(6deg);
+        }
+        100% {
+          transform: scale(1) rotate(-6deg);
+        }
+      } */
+
+      /* NIGHT */
+
+      .night {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* FLOWER */
+
+      .flower {
+        position: absolute;
+        bottom: 200px;
+        left: 50%;
+        transform: translateX(-50%) scale(0);
+        animation: grow 5s ease-out forwards;
+      }
+
+      @keyframes grow {
+        to {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      /* SWAY */
+
+      .sway {
+        animation: sway 4s ease-in-out infinite;
+      }
+
+      @keyframes sway {
+        0% {
+          transform: translateX(-50%) rotate(-4deg);
+        }
+        50% {
+          transform: translateX(-50%) rotate(4deg);
+        }
+        100% {
+          transform: translateX(-50%) rotate(-4deg);
+        }
+      }
+
+      /* PETALS */
+
+      .petal {
+        width: 50px;
+        height: 50px;
+        background: #ff4fa3;
+        border-radius: 50%;
+        position: absolute;
+        box-shadow: 0 0 20px #ff4fa3;
+      }
+
+      .center {
+        width: 35px;
+        height: 35px;
+        background: #ffd700;
+        border-radius: 50%;
+        position: absolute;
+        left: 32px;
+        top: 32px;
+        box-shadow: 0 0 20px #ffd700;
+      }
+
+      .p1 {
+        top: 0;
+        left: 32px;
+      }
+      .p2 {
+        top: 32px;
+        left: 64px;
+      }
+      .p3 {
+        top: 64px;
+        left: 32px;
+      }
+      .p4 {
+        top: 32px;
+        left: 0;
+      }
+
+      /* STEM */
+
+      .stem {
+        width: 6px;
+        height: 160px;
+        background: lime;
+        position: absolute;
+        left: 47px;
+        top: 70px;
+      }
+
+      /* GRASS */
+
+      .grass {
+        position: absolute;
+        bottom: 0;
+        width: 4px;
+        height: 120px;
+        background: lime;
+        animation: wave 3s ease-in-out infinite;
+      }
+
+      @keyframes wave {
+        0% {
+          transform: rotate(-6deg);
+        }
+        50% {
+          transform: rotate(6deg);
+        }
+        100% {
+          transform: rotate(-6deg);
+        }
+      }
+
+      /* SPACE */
+
+      #spaceScreen {
+        display: none;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #070730, #000);
+      }
+
+      #space-scene {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #020111, #000000 70%);
+      }
+
+      /* STARS */
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        opacity: 0.8;
+        animation: twinkle 4s infinite;
+      }
+
+      @keyframes twinkle {
+        0% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.2;
+        }
+      }
+
+      /* SHOOTING STAR */
+
+      .shoot {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: white;
+        box-shadow: 0 0 10px white;
+      }
+
+      /* PLANET IMAGES */
+
+      .space-img {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+        transition: transform 0.3s;
+      }
+
+      .space-img:hover {
+        transform: scale(1.8);
+        z-index: 20;
+      }
+
+      /* GLOW TEXT */
+
+      .spaceText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 10; /* đảm bảo nằm trên ảnh */
+        pointer-events: none; /* ảnh vẫn hover được */
+      }
+
+      @keyframes glow {
+        0% {
+          text-shadow: 0 0 10px white;
+        }
+        50% {
+          text-shadow: 0 0 30px #7df9ff;
+        }
+        100% {
+          text-shadow: 0 0 10px white;
+        }
+      }
+      /* FIREFLIES */
+
+      .firefly {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #ffd700;
+        border-radius: 50%;
+        box-shadow: 0 0 15px #ffd700;
+        animation: fly linear infinite;
+      }
+
+      @keyframes fly {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-120vh);
+        }
+      }
+
+      /* FALLING MESSAGES */
+
+      .falling {
+        position: absolute;
+        top: -50px;
+        background: white;
+        color: black;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        white-space: nowrap;
+        animation: fall linear forwards;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(110vh);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- START -->
+
+    <div id="startScreen" class="screen">
+      <div id="start">Tặng bé iu ✨</div>
+
+      <img
+        id="introImage"
+        src="https://lh3.googleusercontent.com/d/17j4XP-nJaLjtAuh0i6AIEqvBPAnmNzg0"
+      />
+
+      <div id="start">Chạm vào đi ạ</div>
+    </div>
+
+    <!-- LETTER -->
+
+    <div id="letterScreen" class="screen">
+      <div class="envelope" id="envelope">
+        <div class="flap"></div>
+
+        <div class="letter">
+          Nhân dịp 8/3 này Chúc em luôn hạnh phúc ❤️<br /><br />
+
+          Mong rằng mọi điều tuyệt vời nhất sẽ đến với em ✨<br /><br />
+
+          Cảm ơn vì đã xuất hiện trong cuộc đời của toi.
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOWER -->
+
+    <div id="flowerScreen" class="screen">
+      <div class="night"></div>
+
+      <!-- GRASS -->
+      <div class="grass" style="left: 10%"></div>
+      <div class="grass" style="left: 25%"></div>
+      <div class="grass" style="left: 70%"></div>
+      <div class="grass" style="left: 85%"></div>
+
+      <p style="position: absolute; bottom: 40px">Click thêm một lần nữa ✨</p>
+    </div>
+
+    <!-- SPACE -->
+
+    <div id="spaceScreen" class="screen">
+      <div class="spaceText">✨ A little moment for you ✨</div>
+      <div id="space-scene"></div>
+    </div>
+
+    <script>
+      let music;
+
+      let startScreen;
+      let letterScreen;
+      let flowerScreen;
+      let spaceScreen;
+      let envelope;
+
+      window.onload = function () {
+        music = document.getElementById("bgMusic");
+        music.muted = false;
+        fadeInMusic();
+
+        startScreen = document.getElementById("startScreen");
+        letterScreen = document.getElementById("letterScreen");
+        flowerScreen = document.getElementById("flowerScreen");
+        spaceScreen = document.getElementById("spaceScreen");
+        envelope = document.getElementById("envelope");
+
+        music.volume = 0;
+      };
+      function fadeInMusic() {
+        music.play().catch(() => {});
+
+        let volume = 0;
+
+        let fade = setInterval(function () {
+          if (volume < 0.35) {
+            volume += 0.01;
+            music.volume = volume;
+          } else {
+            clearInterval(fade);
+          }
+        }, 200);
+      }
+
+      let step = 0;
+
+      let images = [
+        "https://lh3.googleusercontent.com/d/17XBrnBG5Yj1w_4Nz-Jqh_twcwJg9GWPb",
+        "https://lh3.googleusercontent.com/d/15R0dGRAP74_PcDKhWoMYCIHvMlWA2OCx",
+        "https://lh3.googleusercontent.com/d/15X-fZGlJF3yOcLgpB9OblSiwjCnzmE1g",
+        "https://lh3.googleusercontent.com/d/16alR3pX-NlWZBGtC2Gd3yBmNLVHAtQ2w",
+        "https://lh3.googleusercontent.com/d/15jAenMVphljeJXk9Hci-cnr3su27M0oq",
+        "https://lh3.googleusercontent.com/d/15dNKhS9bL7SFGi_5h32WzLT7KQkgSC2f",
+        "https://lh3.googleusercontent.com/d/13xAxqVPA0Y69coGhZKKPhhCpXcpLzbHQ",
+        "https://lh3.googleusercontent.com/d/15_ubj8VvzMkMPNLCdTD1KvmIdRgUDGO2",
+        "https://lh3.googleusercontent.com/d/12q-FT2C_K04LHknY_1odiMhTguzSnYUG",
+        "https://lh3.googleusercontent.com/d/13J-g8IVdAPLhknmUr4VL5aZv0gmCEsx4",
+        "https://lh3.googleusercontent.com/d/13LXkRSM5GUenKb_S3Ictiuav3bccEmOx",
+        "https://lh3.googleusercontent.com/d/15pHY7WzB0tgDjyRiECe0JSs-HvDpXr3g",
+        "https://lh3.googleusercontent.com/d/15oZE2hu7Ag5PFECLfm52BNPbC9WcRCOz",
+        "https://lh3.googleusercontent.com/d/15h9Q8K2TKOO4c54LlMy59_UfFOBXW-CZ",
+        "https://lh3.googleusercontent.com/d/15zhRxK8Og749Zj-BW4qEDciegs6Oa36G",
+        "https://lh3.googleusercontent.com/d/132Uc2-Tr-L6aEkQc58FXojG1k3oyuxkR",
+        "https://lh3.googleusercontent.com/d/13kqWVR9VqDzc1OVstRysjT0o7QaZAN9y",
+        "https://lh3.googleusercontent.com/d/166AM1cWwOrNfVxxy1bxaWV35rFdCNZUE",
+        "https://lh3.googleusercontent.com/d/16WGb7K0OBt8XrI079FPsFZ1w7SUW7Jrp",
+        "https://lh3.googleusercontent.com/d/15sCpLs2HPqpNcaDd5ubf9d1J5DR7aMlk",
+        "https://lh3.googleusercontent.com/d/16iJf0CQ_79GugjbArf_ylSoiQF7gzdhp",
+        "https://lh3.googleusercontent.com/d/1310rM0rzwFx7FXL_RJH0U823gnbbE6_X",
+        "https://lh3.googleusercontent.com/d/17-NzjSnW7o3B7gRqK4XC8bl6j_QoXq-d",
+        "https://lh3.googleusercontent.com/d/17WmwT9QomBUC4dLvzZKBnFwD4opYkWtw",
+        "https://lh3.googleusercontent.com/d/16VnzFIOu4oJ-M1T3DFsHNClCegyLTTbo",
+        "https://lh3.googleusercontent.com/d/15xNQUzw4JyQrxajVFim4QjyvQ1tX3QQm",
+        "https://lh3.googleusercontent.com/d/16br36gtMh2flr1c12AOni4xlpSjVuB3y",
+        "https://lh3.googleusercontent.com/d/15xGSLO4CBXnH9PZsORUObiArQDBC2TmS",
+        "https://lh3.googleusercontent.com/d/15YJAov8572_Wx0Bv00L7dnsMU2Qu1r8J",
+        "https://lh3.googleusercontent.com/d/17M6sxBv4Yut2XZMWWSQckxhC9ZtuFoTi",
+        "https://lh3.googleusercontent.com/d/15SrKRjwv_iH93sSIKiDG5a3-mVbBHI43",
+        "https://lh3.googleusercontent.com/d/13GOUQ7yBUq-jTNZEPrLIzEpCghuCeHlD",
+        "https://lh3.googleusercontent.com/d/15WTEQwlmFPQRc1OB5wjszUAvE8JnYKXJ",
+        "https://lh3.googleusercontent.com/d/13X2mOUOgwoQ7lsEOYO4ZMJ5U5ImYW4qE",
+        "https://lh3.googleusercontent.com/d/141OYYoawb5LrEC5ka1Xz-RuCi39qkovF",
+        "https://lh3.googleusercontent.com/d/15E08bwpyz5iYD8daE1yWdh-mbqpNabSy",
+        "https://lh3.googleusercontent.com/d/17-kH2jU1Z2MqyKFB8w2tGOuTeY-rHHAG",
+        "https://lh3.googleusercontent.com/d/1768KmonC5_BQAFWarofeY35OfgBeCsST",
+        "https://lh3.googleusercontent.com/d/17EtfHHEVUGuLXIg3PnL1NdL3pacQdDjf",
+        "https://lh3.googleusercontent.com/d/17HjutfDGVinNSeUnUU6FEm_3qLffN9RH",
+        "https://lh3.googleusercontent.com/d/17T_hEraY8imi0vf8k1grSMEAk9G3lOuX",
+        "https://lh3.googleusercontent.com/d/12sEU5uFSO7kEuCOjRrHw54df6tQ9hdgN",
+        "https://lh3.googleusercontent.com/d/13ii4TizDAddNq434oGiAWBJCGIrjgtWr",
+        "https://lh3.googleusercontent.com/d/14n4woGba-RiFhoGcWjw4wfZb9g-mu7qg",
+        "https://lh3.googleusercontent.com/d/14nf7DROcwitQPLGhxHNOAUYmNIDDS19-",
+        "https://lh3.googleusercontent.com/d/16EPfya5AODL3W2tij-4WNDnuwmpo8g7B",
+        "https://lh3.googleusercontent.com/d/16DV2__WOeSgsbt5ecAEZOsYdq_3I0DTa",
+        "https://lh3.googleusercontent.com/d/16H-QxMV93w4RL41UHG7MnWPXbXsEHQVV",
+        "https://lh3.googleusercontent.com/d/16IM-GHkDJgcdrcF7kR8IT85gxxHTEo4_",
+        "https://lh3.googleusercontent.com/d/16VK1HvqGPCZUMk8_5xJxVn9iKmCzYp9y",
+        "https://lh3.googleusercontent.com/d/14yy4S9_QkfW2UlC3YguHOtv6IllbJSqh",
+        "https://lh3.googleusercontent.com/d/166f3QubuVli_69psvyl-ixUNmYdR3iOC",
+        "https://lh3.googleusercontent.com/d/12q5hT7R-QPUUTt6vlJdGUoK0HzBj1CEx",
+        "https://lh3.googleusercontent.com/d/16D5vvpCYQxVn3RJ0GjREISfe6mKghv7j",
+        "https://lh3.googleusercontent.com/d/167DRhOtS918bn9848J7eBI1QJBJAJnFY",
+        "https://lh3.googleusercontent.com/d/140jwBDsQ9r6ueObjXmJKZmZySrO4QSvg",
+        "https://lh3.googleusercontent.com/d/141ef_jfmEL3ZVUHgbPnD2pU9zTpEHDSz",
+        "https://lh3.googleusercontent.com/d/140JfFzLQ_RDsVpBBnwfxgrjW7TNJ-bDl",
+        "https://lh3.googleusercontent.com/d/14N-gvyceDvah4WMW3JIMnPUEEMGQlYFe",
+        "https://lh3.googleusercontent.com/d/13y4A-_Kbmqtexiua8ZuVM3h5lL1Jmp2D",
+        "https://lh3.googleusercontent.com/d/14ORxTJRN64cVFnGrn7Op8gtDHaoz-9nJ",
+        "https://lh3.googleusercontent.com/d/14pUESpEN31n3J7DwjDO-9NBaLFLVBhcH",
+        "https://lh3.googleusercontent.com/d/13mFiG84j0KAz7ZMB0SH1usT066fYST4K",
+        "https://lh3.googleusercontent.com/d/13mhm8t9oK6aXEwiZZ0YRdboi_HS-3fxN",
+        "https://lh3.googleusercontent.com/d/13rpTMQRTqqQuUEoPNRA6tYxs4xpHjLir",
+        "https://lh3.googleusercontent.com/d/14AdW3ss5GKk_5dBMHtdLjSa-rrci6Rfl",
+        "https://lh3.googleusercontent.com/d/14LAb5Waqv0HgxmM0qepCRZttKAXj0Vir",
+        "https://lh3.googleusercontent.com/d/14M9FVJbHtftofnhQjNv8sZLokcbL52V_",
+        "https://lh3.googleusercontent.com/d/14QnImCcj4s1SknCXLtOB07GFtoW2FR6I",
+        "https://lh3.googleusercontent.com/d/14_3e0iAEx_hFZmXA41OATNCmLpHiw9S7",
+        "https://lh3.googleusercontent.com/d/14aEzRCsDppuK-ncHQVEAm2Xwog5VniND",
+        "https://lh3.googleusercontent.com/d/14ipaA7s16P5qGZ1b8xdA4skkw15tD-0o",
+        "https://lh3.googleusercontent.com/d/14zt_6YLaEqWWMY8tybjs9yXqv2LjYI_0",
+        "https://lh3.googleusercontent.com/d/15JEtr-OLTmtBHoLM1OmBTmJSSHtc1Oxb",
+        "https://lh3.googleusercontent.com/d/15POPUGchPeO6F-RFICQZhnENR4533qyt",
+        "https://lh3.googleusercontent.com/d/16icTOIjYclatWobVI2TQXCK9DEpg_g1P",
+        "https://lh3.googleusercontent.com/d/16mYQKfWDsjOU7ar8AwEYlABL6kKObLa5",
+        "https://lh3.googleusercontent.com/d/16nF3-uoD7TJx2ZtUszXTFptnxxBPwzcd",
+        "https://lh3.googleusercontent.com/d/16vJbOeIr1P7-u7GuC5aujfWS2zzJJTp9",
+        "https://lh3.googleusercontent.com/d/1v1lBYNOdQoXAOO0rZh00W87ZY7WyfqGm",
+      ];
+
+      document.body.onclick = function () {
+        if (music.paused) {
+          fadeInMusic();
+        }
+
+        step++;
+
+        if (step == 1) {
+          startScreen.style.display = "none";
+          letterScreen.style.display = "flex";
+          hearts();
+          flowers();
+          fireworks();
+        } else if (step == 2) {
+          envelope.classList.add("open");
+        } else if (step == 3) {
+          letterScreen.style.display = "none";
+          flowerScreen.style.display = "flex";
+          startFlowerScene();
+        } else if (step == 4) {
+          flowerScreen.style.display = "none";
+          spaceScreen.style.display = "flex";
+
+          createStars();
+          shootingStars();
+          createOrbitImages();
+        }
+      };
+
+      /* FLOWER ENVIRONMENT */
+
+      function startFlowerScene() {
+        createFireflies();
+
+        for (let i = 0; i < 14; i++) {
+          setTimeout(() => {
+            createFlower();
+          }, i * 300);
+        }
+
+        startFallingMessages();
+      }
+
+      function createFlower() {
+        let flower = document.createElement("div");
+        flower.className = "flower";
+
+        flower.style.left = 5 + Math.random() * 90 + "vw";
+        flower.style.bottom = 200 + Math.random() * 20 + "px";
+
+        flower.innerHTML = `
+    <div class="petal p1"></div>
+    <div class="petal p2"></div>
+    <div class="petal p3"></div>
+    <div class="petal p4"></div>
+    <div class="center"></div>
+    <div class="stem"></div>
+  `;
+
+        flowerScreen.appendChild(flower);
+
+        setTimeout(() => {
+          flower.classList.add("sway");
+        }, 3000);
+      }
+
+      /* FIREFLIES */
+
+      function createFireflies() {
+        for (let i = 0; i < 35; i++) {
+          let f = document.createElement("div");
+
+          f.className = "firefly";
+
+          f.style.left = Math.random() * 100 + "vw";
+          f.style.top = Math.random() * 100 + "vh";
+
+          f.style.animationDuration = 4 + Math.random() * 6 + "s";
+
+          flowerScreen.appendChild(f);
+        }
+      }
+
+      /* FALLING MESSAGES */
+
+      const messages = [
+        "Chúc em luôn hạnh phúc ❤️",
+        "Mong mọi điều tốt đẹp đến với em ✨",
+        "Cảm ơn vì đã xuất hiện 🌸",
+        "Stay happy always 💫",
+        "You deserve the best 💖",
+        "Cô gái xinh đẹp của toi",
+        "Iu bé nhìu nhìu",
+        "Công chúa địu đà",
+        "Anh không biết “nhớ” là động từ hay tính từ.",
+        "Bây giờ thì anh biết rồi.",
+        "Nhớ là tính từ.",
+        "Tính từ lúc quen em",
+      ];
+
+      function createMessage() {
+        let m = document.createElement("div");
+
+        m.className = "falling";
+
+        m.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+        m.style.left = Math.random() * 90 + "vw";
+
+        let duration = 6 + Math.random() * 4;
+
+        m.style.animationDuration = duration + "s";
+
+        flowerScreen.appendChild(m);
+
+        setTimeout(() => m.remove(), duration * 1000);
+      }
+
+      function startFallingMessages() {
+        setInterval(createMessage, 900);
+      }
+
+      /* STARS */
+
+      function createStars() {
+        for (let i = 0; i < 300; i++) {
+          let s = document.createElement("div");
+          s.className = "star";
+
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.top = Math.random() * 100 + "vh";
+
+          spaceScreen.appendChild(s);
+        }
+      }
+
+      /* SHOOTING STARS */
+
+      function shootingStars() {
+        setInterval(() => {
+          let star = document.createElement("div");
+
+          star.className = "shoot";
+
+          star.style.left = "-20px";
+          star.style.top = Math.random() * 80 + "vh";
+
+          star.style.transition = "2s linear";
+
+          spaceScreen.appendChild(star);
+
+          setTimeout(() => {
+            star.style.left = "110vw";
+            star.style.top = Math.random() * 90 + "vh";
+          }, 50);
+
+          setTimeout(() => star.remove(), 2000);
+        }, 1700);
+      }
+
+      /* HEARTS */
+
+      function hearts() {
+        setInterval(() => {
+          let heart = document.createElement("div");
+
+          heart.className = "heart";
+
+          heart.innerHTML = "💖";
+
+          heart.style.left = Math.random() * 100 + "vw";
+
+          document.body.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 8000);
+        }, 400);
+      }
+
+      /* FLOWERS */
+
+      function flowers() {
+        setInterval(() => {
+          let flower = document.createElement("div");
+
+          flower.className = "flowerLT";
+
+          flower.innerHTML = "🌸";
+
+          flower.style.left = Math.random() * 100 + "vw";
+
+          document.body.appendChild(flower);
+
+          setTimeout(() => flower.remove(), 8000);
+        }, 700);
+      }
+
+      /* FIREWORKS */
+
+      function fireworks() {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        function explode() {
+          let x = Math.random() * canvas.width;
+          let y = (Math.random() * canvas.height) / 2;
+
+          for (let i = 0; i < 100; i++) {
+            particles.push({
+              x: x,
+              y: y,
+              vx: (Math.random() - 0.5) * 8,
+              vy: (Math.random() - 0.5) * 8,
+              life: 100,
+            });
+          }
+        }
+
+        setInterval(explode, 2000);
+
+        function animate() {
+          ctx.fillStyle = "rgba(0,0,0,0.25)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          particles.forEach((p, i) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life--;
+
+            ctx.fillStyle = "hsl(" + Math.random() * 360 + ",100%,60%)";
+
+            ctx.fillRect(p.x, p.y, 3, 3);
+
+            if (p.life <= 0) particles.splice(i, 1);
+          });
+
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+      }
+
+      /* ORBITING IMAGES */
+
+      function createOrbitImages() {
+        let container = document.getElementById("space-scene");
+
+        let randomImages = images.sort(() => 0.5 - Math.random());
+
+        randomImages.forEach((src, i) => {
+          let img = document.createElement("img");
+          img.src = src;
+          img.className = "space-img";
+
+          let angle = Math.random() * 360;
+          let radius = 250 + Math.random() * 450;
+          let speed = 0.02 + Math.random() * 0.05;
+
+          container.appendChild(img);
+
+          function animate() {
+            angle += speed;
+
+            let x = Math.cos((angle * Math.PI) / 180) * radius;
+            let y = Math.sin((angle * Math.PI) / 180) * radius;
+
+            img.style.left = "calc(50% + " + x + "px)";
+            img.style.top = "calc(50% + " + y + "px)";
+
+            requestAnimationFrame(animate);
+          }
+
+          animate();
+        });
+      }
+    </script>
+    <audio id="bgMusic" autoplay loop muted>
+      <source
+        src="https://raw.githubusercontent.com/hgiang25/music/main/Có Đôi Điều.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+  </body>
+</html>
